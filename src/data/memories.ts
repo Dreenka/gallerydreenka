@@ -8,36 +8,36 @@ export interface Memory {
 }
 
 export const memories: Memory[] = [
-  { 
-    id: 1, 
-    url: 'https://picsum.photos/id/64/800/1000', // Portrait dummy
-    title: 'First Encounter', 
-    date: 'OCT 12', 
-    location: 'Old Town',
-    message: 'Momen pertama kali kita duduk berdua, dunia berasa pelan banget.'
+  {
+    id: 1,
+    url: "/assets/gallery/galdrensatu.webp",
+    title: "Dreenka.",
+    date: "02 November 2025",
+    location: "MEDAN",
+    message: "bantu isi."
   },
-  { 
-    id: 2, 
-    url: 'https://picsum.photos/id/10/1900/600', // Wide dummy
-    title: 'Horizon Drive', 
-    date: 'NOV 04', 
-    location: 'Coastal Road',
-    message: 'Perjalanan panjang yang nggak kerasa karena ada kamu di samping.'
+  {
+    id: 2,
+    url: "/assets/gallery/galdrendua.webp",
+    title: "Dreenka.",
+    date: "02 November 2025",
+    location: "MEDAN",
+    message: "bantu isi."
   },
-  { 
-    id: 3, 
-    url: 'https://picsum.photos/id/28/1900/600', // Wide dummy
-    title: 'City Lights', 
-    date: 'NOV 20', 
-    location: 'Skyline',
-    message: 'Melihat lampu kota dari atas sini, tapi matamu tetap yang paling terang.'
+  {
+    id: 3,
+    url: "/assets/gallery/galdrentiga.webp",
+    title: "Dreenka.",
+    date: "02 November 2025",
+    location: "MEDAN",
+    message: "bantu isi."
   },
-  { 
-    id: 4, 
-    url: 'https://picsum.photos/id/42/800/1000', // Portrait dummy
-    title: 'Rainy Coffee', 
-    date: 'DEC 05', 
-    location: 'Warm Cafe',
-    message: 'Hujan di luar, kehangatan di dalam. Secangkir kopi dan sejuta cerita.'
-  },
+  {
+    id: 4,
+    url: "/assets/gallery/galdrenempat.webp",
+    title: "Dreenka.",
+    date: "02 November 2025",
+    location: "MEDAN",
+    message: "bantu isi."
+  }
 ];

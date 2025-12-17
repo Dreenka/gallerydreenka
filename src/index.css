@@ -11,6 +11,16 @@
   }
 }
 
+/* Tambahkan di bawah bagian @layer base */
+input::placeholder {
+  @apply text-slate-300 tracking-normal font-light;
+}
+
+/* Memastikan transisi antar halaman login dan main mulus */
+.grain {
+  transition: background-color 0.5s ease;
+}
+
 .grain::before {
   content: "";
   position: fixed;
@@ -38,3 +48,4 @@
 .animate-float {
   animation: float-slow 10s infinite ease-in-out;
 }
+

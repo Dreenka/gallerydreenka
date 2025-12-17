@@ -1,121 +1,115 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { memories, type Memory } from '../data/memories';
 
 export const Gallery = () => {
   const [selected, setSelected] = useState<Memory | null>(null);
+  const [isFromNavbar, setIsFromNavbar] = useState(false);
+
+  // Reverse data: Data terakhir di file muncul pertama di web
+  const displayMemories = [...memories].reverse();
+
+  useEffect(() => {
+    const handleOpenStory = () => {
+      setSelected(displayMemories[0]);
+      setIsFromNavbar(true);
+    };
+    window.addEventListener('open-story', handleOpenStory);
+    return () => window.removeEventListener('open-story', handleOpenStory);
+  }, [displayMemories]);
 
   return (
-    <div className="max-w-7xl mx-auto px-3 md:px-6 pb-60 relative">
-      {/* Background Typography */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden opacity-[0.02] select-none z-0">
-        <h2 className="text-[25vw] font-black leading-none -ml-20">TIME</h2>
-        <h2 className="text-[25vw] font-black leading-none text-right -mr-20">LESS</h2>
+    <section className="relative py-12 md:py-20 overflow-hidden">
+      {/* DIVIDER ATAS - GLOW BLUE TEGAS */}
+      <div className="absolute top-0 left-0 w-full h-px z-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-[3px] shadow-[0_0_25px_rgba(59,130,246,0.9)]" />
       </div>
 
-      {/* TAMBAHKAN 'items-start' di sini! 
-         Ini kunci agar foto yang pendek tidak dipaksa setinggi foto yang panjang 
-      */}
-      <div className="grid grid-cols-2 md:grid-cols-12 gap-3 md:gap-10 items-start relative z-10">
-        {memories.map((item, i) => {
-          const rowNumber = Math.floor(i / 2);
-          const isEvenRow = rowNumber % 2 === 0;
-          
-          let colSpan = "";
-          let aspectRatio = "";
-          
-          if (isEvenRow) {
-            colSpan = i % 2 === 0 ? "md:col-span-4" : "md:col-span-8";
-            aspectRatio = i % 2 === 0 ? "aspect-[4/5]" : "aspect-[16/9]";
-          } else {
-            colSpan = i % 2 === 0 ? "md:col-span-8" : "md:col-span-4";
-            aspectRatio = i % 2 === 0 ? "aspect-[16/9]" : "aspect-[4/5]";
-          }
+      <div className="max-w-7xl mx-auto px-4 md:px-12 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-12 gap-4 md:gap-10">
+          {displayMemories.map((item, i) => {
+            const isEvenRow = Math.floor(i / 2) % 2 === 0;
+            let colSpan = i % 2 === 0 ? (isEvenRow ? "md:col-span-4" : "md:col-span-8") : (isEvenRow ? "md:col-span-8" : "md:col-span-4");
+            let desktopAspect = i % 2 === 0 ? (isEvenRow ? "md:aspect-[4/5]" : "md:aspect-[16/9]") : (isEvenRow ? "md:aspect-[16/9]" : "md:aspect-[4/5]");
 
-          return (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className={`relative group col-span-1 ${colSpan}`}
-            >
-              <div className="glass-panel-heavy p-2 md:p-4 flex flex-col shadow-xl">
-                
-                {/* Gunakan 'h-auto' dan 'max-w-full' agar rasio aslinya terjaga 
-                */}
-                <div className={`relative overflow-hidden rounded-[1.5rem] md:rounded-[2rem] ${aspectRatio} w-full bg-slate-100`}>
-                  <img 
-                    src={item.url} 
-                    className="w-full h-full object-cover" 
-                    alt={item.title}
-                  />
-                </div>
-
-                <div className="mt-3 md:mt-5 px-1 md:px-2 pb-1 md:pb-2 flex justify-between items-center gap-2">
-                  <div className="max-w-[70%]">
-                    <span className="text-[7px] md:text-[9px] tracking-[0.2em] md:tracking-[0.4em] text-blue-400 font-bold uppercase block">
-                      {item.date}
-                    </span>
-                    <h3 className="text-[11px] md:text-xl font-light italic font-serif text-slate-800 tracking-tight leading-tight truncate">
-                      {item.title}
-                    </h3>
-                  </div>
-
-                  <motion.button 
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setSelected(item)}
-                    className="w-8 h-8 md:w-12 md:h-12 glass-card-inner rounded-xl md:rounded-2xl flex items-center justify-center text-blue-500 shadow-sm border border-white flex-shrink-0"
+            return (
+              <motion.div key={item.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className={`col-span-1 ${colSpan}`}>
+                <div className="glass-panel-heavy p-2 md:p-4 h-full flex flex-col border-2 border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.15)] hover:shadow-[0_0_40px_rgba(59,130,246,0.4)] hover:border-blue-400/60 transition-all duration-500 rounded-[1.5rem] md:rounded-[2.5rem] group/card">
+                  <div 
+                    onClick={() => { setSelected(item); setIsFromNavbar(false); }} 
+                    className={`relative overflow-hidden rounded-[1.2rem] md:rounded-[2rem] aspect-square ${desktopAspect} w-full bg-slate-100 cursor-zoom-in group`}
                   >
-                    <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
-                    </svg>
-                  </motion.button>
+                    <img src={item.url} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" alt="" />
+                    <div className="absolute inset-0 bg-white/20 backdrop-brightness-110 opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out" />
+                  </div>
+                  
+                  {/* FOOTER CARD - TEXT SIZE ADJUSTED */}
+                  <div className="mt-3 md:mt-5 flex justify-between items-center px-1 md:px-2 pb-1 md:pb-2">
+                    <div className="truncate pr-3">
+                      <p className="text-[7px] md:text-[10px] text-blue-500 font-extrabold uppercase tracking-[0.2em]">
+                        {item.date} • {item.location}
+                      </p>
+                      <h3 className="text-[10px] md:text-xl font-serif italic text-slate-800 truncate mt-0.5">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <button onClick={() => setSelected(item)} className="w-8 h-8 md:w-14 md:h-14 rounded-full bg-blue-50/50 flex items-center justify-center text-blue-600 border-2 border-blue-200 shadow-lg hover:bg-blue-600 hover:text-white transition-all duration-300 flex-shrink-0">
+                      <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="md:w-7 md:h-7">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          );
-        })}
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
+      <div className="absolute bottom-0 left-0 w-full h-px z-20">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500 to-transparent h-[3px] shadow-[0_0_25px_rgba(59,130,246,1)]" />
+      </div>
+
+      {/* POP-UP MODAL - TEXT SIZE ADJUSTED FOR ALL DEVICES */}
       <AnimatePresence>
         {selected && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelected(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/10 backdrop-blur-xl"
-          >
-             <motion.div
-              initial={{ scale: 0.95, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="glass-panel-heavy max-w-xl w-full p-6 md:p-12 relative shadow-2xl"
-            >
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue-300" />
-              <div className="flex justify-between items-start mb-6 md:mb-8">
-                <div>
-                  <h4 className="text-[8px] md:text-[10px] tracking-[0.5em] text-blue-400 font-bold uppercase">Archive</h4>
-                  <p className="text-slate-400 text-[10px] md:text-xs tracking-widest mt-1">{selected.location}</p>
-                </div>
-                <button onClick={() => setSelected(null)} className="text-slate-400">
-                  <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelected(null)} className="fixed inset-0 z-[200] flex items-center justify-center p-2 md:p-10 bg-white/80 backdrop-blur-3xl">
+             <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }} onClick={(e) => e.stopPropagation()} className="glass-panel-heavy w-[95vw] max-w-6xl grid grid-cols-1 md:grid-cols-2 overflow-hidden shadow-2xl relative border-2 border-blue-100 max-h-[90vh] md:max-h-none overflow-y-auto md:overflow-hidden">
+              <div className="aspect-[4/5] md:aspect-auto relative bg-slate-200">
+                <img src={selected.url} className="w-full h-full object-cover" alt="" />
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-white/40 to-transparent opacity-90" />
               </div>
-              <div className="space-y-4 md:space-y-6 text-center">
-                <div className="aspect-video w-full rounded-2xl overflow-hidden bg-slate-100">
-                  <img src={selected.url} className="w-full h-full object-cover" alt="" />
-                </div>
-                <p className="text-lg md:text-2xl text-slate-700 font-light italic font-serif">
+              
+              <div className="p-6 md:p-16 lg:p-20 flex flex-col justify-center relative bg-white/40 text-center md:text-left">
+                <button onClick={() => setSelected(null)} className="absolute top-6 right-6 text-blue-600 hover:scale-110 transition-transform">
+                  <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="md:w-9 md:h-9"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                
+                <span className="text-[9px] md:text-xs text-blue-500 font-extrabold uppercase tracking-[0.3em]">
+                  {selected.date} • {selected.location}
+                </span>
+                
+                <h2 className="text-2xl md:text-5xl lg:text-7xl font-serif italic text-slate-800 my-3 md:my-6 leading-tight">
+                  {selected.title}
+                </h2>
+                
+                <div className="w-12 md:w-20 h-[1.5px] md:h-[2px] bg-blue-400 mx-auto md:mx-0 mb-5 md:mb-10" />
+                
+                {/* MESSAGE TEXT SIZE: MD ON MOBILE, 2XL-3XL ON DESKTOP */}
+                <p className="text-base md:text-2xl lg:text-3xl text-slate-600 font-light italic leading-relaxed md:leading-snug">
                   "{selected.message}"
                 </p>
+                
+                {isFromNavbar && (
+                  <button onClick={() => setSelected(null)} className="mt-8 md:mt-12 bg-blue-600 text-white px-8 md:px-12 py-3 md:py-5 rounded-full text-[10px] md:text-sm font-bold shadow-2xl shadow-blue-300 self-center md:self-start hover:bg-blue-700 transition-all uppercase tracking-widest active:scale-95">
+                    Lanjut Lihat Foto
+                  </button>
+                )}
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </section>
   );
 };

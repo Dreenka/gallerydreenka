@@ -1,37 +1,35 @@
 import { motion } from 'framer-motion';
 
-export const Hero = () => {
-  return (
-    <section className="relative pt-44 pb-20 flex flex-col items-center px-6">
-      {/* Floating Badge */}
-      <motion.div
+export const Hero = () => (
+  <section className="relative min-h-[60vh] md:min-h-[70vh] flex flex-col justify-center items-center px-6 pt-24 pb-10 overflow-hidden">
+    <div className="text-center z-10">
+      <motion.span 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="text-[9px] md:text-xs tracking-[0.6em] text-blue-500 font-bold uppercase mb-4 block"
+      >
+        Digital Archive — Vol. 01
+      </motion.span>
+      
+      <motion.h1 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card-inner px-4 py-1.5 rounded-full mb-8"
+        className="text-4xl md:text-8xl font-serif italic text-slate-800 leading-tight"
       >
-        <span className="text-[10px] tracking-[0.4em] font-bold text-blue-400/80 uppercase">
-          Private Archive 01
+        Pieces of <br /> 
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-slate-400">
+          Our Journey.
         </span>
-      </motion.div>
+      </motion.h1>
 
-      {/* Main Glass Title */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="glass-panel-heavy p-12 md:p-16 max-w-3xl w-full text-center relative overflow-hidden"
+      <motion.p 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+        className="mt-6 text-slate-400 font-light tracking-widest text-[9px] md:text-xs uppercase max-w-xs md:max-w-md mx-auto leading-relaxed"
       >
-        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-50" />
-        
-        <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-[1.1] text-slate-800 mb-8">
-          Collecting <br />
-          <span className="italic font-serif text-blue-500/60 text-glow">timeless</span> whispers.
-        </h1>
-        
-        <p className="max-w-md mx-auto text-slate-500 font-light text-base leading-relaxed">
-          Sebuah ruang tenang untuk menyimpan jejak cerita yang tak ingin kita biarkan memudar oleh waktu.
-        </p>
-      </motion.div>
-    </section>
-  );
-};
+        Captured in time, preserved in heart.
+      </motion.p>
+    </div>
+  </section>
+);
